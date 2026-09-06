@@ -9,12 +9,14 @@ from smart_imputer.imputer import impute_missing_values
 @pytest.fixture
 def df_sale():
     """DataFrame avec noms mal formés et valeurs manquantes."""
-    return pd.DataFrame({
-        "Age": [25, 30, np.nan, 40],
-        "Revenu Annuel": [50000, np.nan, 60000, 70000],
-        "code-postal": ["75001", "69001", "13001", "33000"],
-        "colonne_vide": [None, None, None, None],
-    })
+    return pd.DataFrame(
+        {
+            "Age": [25, 30, np.nan, 40],
+            "Revenu Annuel": [50000, np.nan, 60000, 70000],
+            "code-postal": ["75001", "69001", "13001", "33000"],
+            "colonne_vide": [None, None, None, None],
+        }
+    )
 
 
 def test_nettoyage_noms_colonnes(df_sale):
@@ -36,10 +38,12 @@ def test_imputation_mediane():
 
 
 def test_suppression_si_trop_de_manquants():
-    df = pd.DataFrame({
-        "a": [1.0, 2.0, 3.0],
-        "b": [np.nan, np.nan, np.nan],
-    })
+    df = pd.DataFrame(
+        {
+            "a": [1.0, 2.0, 3.0],
+            "b": [np.nan, np.nan, np.nan],
+        }
+    )
     df_out = impute_missing_values(df, deletion_threshold=40)
     assert "b" not in df_out.columns
     assert "a" in df_out.columns
