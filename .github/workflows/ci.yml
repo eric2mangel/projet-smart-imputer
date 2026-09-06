@@ -1,0 +1,31 @@
+name: CI
+ 
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+ 
+jobs:
+  quality:
+    name: Qualité du code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+ 
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+ 
+      - name: Installer les dépendances
+        run: pip install -e ".[dev]"
+ 
+      - name: Linting avec Ruff
+        run: ruff check src/ tests/
+ 
+      - name: Formatage avec Ruff
+        run: ruff format src/ tests/ --check
+ 
+      - name: Tests avec pytest
+        run: pytest tests/ -v --cov=src --cov-report=xml --cov-fail-under=80
