@@ -1,0 +1,2 @@
+logs/*.log
+models/*.joblib          # <-- AJOUTÉ

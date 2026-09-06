@@ -1,0 +1,12 @@
+paths:
+  raw_data: "data/raw/sample.csv"
+  processed_data: "data/processed/cleaned_data.csv"
+  models: "models/"        # <-- AJOUTÉ
+
+parameters:
+  deletion_threshold: 40.0
+  r2_threshold: 0.6
+
+model:
+  n_estimators: 50
+  random_state: 42

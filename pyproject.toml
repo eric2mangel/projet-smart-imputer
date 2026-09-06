@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "smart-imputer"
+version = "0.1.0"
+description = "Pipeline professionnel de nettoyage et d'imputation de données"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pandas==3.0.3",
+    "pyyaml==6.0.3",
+    "python-dotenv==1.2.2",
+    "scikit-learn==1.9.0",
+    "pydantic>=2.13.4",
+    "pandera>=0.32.1",
+    "joblib>=1.5.3"          # <-- AJOUTÉ
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["*/tests/*"]
+ 
+[tool.coverage.report]
+fail_under = 80   # échoue si la couverture globale < 80 %
+
+[tool.ruff]
+line-length = 88 #Largeur max fixée à 88 caractères
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"] # Activer ces familles de règles
+ignore = ["E501"] # Désactiver une ou des règles
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # ré-exports volontaires
+
