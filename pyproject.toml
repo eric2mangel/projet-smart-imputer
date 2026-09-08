@@ -9,7 +9,7 @@ description = "Pipeline professionnel de nettoyage et d'imputation de données"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "pandas==3.0.3",
+    "pandas==3.0.5",
     "pyyaml==6.0.3",
     "python-dotenv==1.2.2",
     "scikit-learn==1.9.0",
