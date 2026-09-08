@@ -30,7 +30,7 @@ pythonpath = ["src"]
 [tool.coverage.run]
 source = ["src"]
 omit = ["*/tests/*"]
- 
+
 [tool.coverage.report]
 fail_under = 40   # échoue si la couverture globale < 80 %
 
@@ -43,4 +43,3 @@ ignore = ["E501"] # Désactiver une ou des règles
 
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]  # ré-exports volontaires
-
