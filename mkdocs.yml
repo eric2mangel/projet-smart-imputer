@@ -1,0 +1,14 @@
+site_name: Smart Imputer
+theme:
+  name: material
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]        # Les fichiers sont dans src
+          options:
+            show_source: true
+
+nav:
+  - Accueil: index.md
+  - Référence API: reference.md
