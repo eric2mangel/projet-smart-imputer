@@ -11,7 +11,7 @@ requires-python = ">=3.12"
 dependencies = [
     "pandas==3.0.3",
     "pyyaml==6.0.3",
-    "python-dotenv==1.2.2",
+    "python-dotenv==1.2.3",
     "scikit-learn==1.9.0",
     "pydantic>=2.13.4",
     "pandera>=0.32.1",
