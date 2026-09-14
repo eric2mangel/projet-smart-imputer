@@ -1,10 +1,14 @@
 import logging
-from pathlib import Path  # Ajout
+from pathlib import Path
 
-import joblib  # Ajout
+import joblib
+import mlflow  # <-- AJOUTÉ
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score
+
+# Force MLflow à utiliser la base SQLite à la racine
+mlflow.set_tracking_uri("sqlite:///mlflow.db")
 
 # Un logger par module : son nom (ex. "smart_imputer.imputer") permet de savoir
 # précisément d'où vient chaque message dans les logs.
@@ -17,7 +21,7 @@ def impute_missing_values(
     r2_threshold: float = 0.6,
     nb_estimators: int = 50,
     random_value: int = 42,
-    models_dir: Path | None = None,  # Ajout
+    models_dir: Path | None = None,
 ) -> pd.DataFrame:
     """Impute les valeurs manquantes (médiane puis Random Forest si R2 suffisant).
 
@@ -69,19 +73,32 @@ def impute_missing_values(
                         c,
                         model_path,
                     )
+
                 else:
-                    rf = RandomForestRegressor(
-                        n_estimators=nb_estimators, random_state=random_value
-                    )
-                    rf.fit(train_df[feats], train_df[c])
-                    if model_path:
-                        model_path.parent.mkdir(parents=True, exist_ok=True)
-                        joblib.dump(rf, model_path)
-                        logger.info(
-                            "%s : modèle entraîné puis sauvegardé dans %s",
-                            c,
-                            model_path,
+                    with mlflow.start_run(run_name=f"imputation_rf_{c}"):
+                        mlflow.log_param("n_estimators", nb_estimators)
+                        mlflow.log_param("random_state", random_value)
+                        mlflow.log_param("colonne", c)
+
+                        rf = RandomForestRegressor(
+                            n_estimators=nb_estimators, random_state=random_value
                         )
+                        rf.fit(train_df[feats], train_df[c])
+
+                        pred_train = rf.predict(train_df[feats])
+                        r2 = r2_score(train_df[c], pred_train)
+                        logger.debug("%s : R2 = %s", c, round(r2, 3))
+                        mlflow.log_metric("r2_train", r2)
+                        mlflow.sklearn.log_model(rf, "model")
+
+                        if model_path:
+                            model_path.parent.mkdir(parents=True, exist_ok=True)
+                            joblib.dump(rf, model_path)
+                            logger.info(
+                                "%s : modèle entraîné puis sauvegardé dans %s",
+                                c,
+                                model_path,
+                            )
 
                 pred_train = rf.predict(train_df[feats])
                 r2 = r2_score(train_df[c], pred_train)

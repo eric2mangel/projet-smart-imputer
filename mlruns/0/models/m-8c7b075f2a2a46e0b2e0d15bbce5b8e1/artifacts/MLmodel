@@ -1,0 +1,24 @@
+artifact_path: file:C:/PRO/Missions/ENI/Version 2/Organisation nouvelles parties/INDUSTRIALISATION/smartimputer_versions/Version
+  2/ETAPE 7/projet_smart_imputer/mlruns/0/models/m-8c7b075f2a2a46e0b2e0d15bbce5b8e1/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.skops
+    predict_fn: predict
+    python_version: 3.12.10
+  sklearn:
+    code: null
+    pickled_model: model.skops
+    serialization_format: skops
+    sklearn_version: 1.9.0
+    skops_trusted_types: null
+mlflow_version: 3.16.0
+model_id: m-8c7b075f2a2a46e0b2e0d15bbce5b8e1
+model_size_bytes: 1168304
+model_uuid: m-8c7b075f2a2a46e0b2e0d15bbce5b8e1
+prompts: null
+run_id: 1221b61fcd3345959da8c4b0e83dc0ad
+utc_time_created: '2026-09-10 16:03:09.978067'

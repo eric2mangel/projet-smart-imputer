@@ -15,7 +15,8 @@ dependencies = [
     "scikit-learn==1.9.0",
     "pydantic>=2.13.4",
     "pandera>=0.32.1",
-    "joblib>=1.5.3"          # <-- AJOUTÉ
+    "joblib>=1.5.3",
+    "mlflow==3.16.0"          # <-- AJOUTÉ
 ]
 
 [project.optional-dependencies]
