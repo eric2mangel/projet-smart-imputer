@@ -19,7 +19,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Construire et pousser l'image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: true
           tags: ghcr.io/${{ github.repository }}/smart-imputer:latest
