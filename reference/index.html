@@ -955,11 +955,7 @@ entraîne un modèle à chaque appel, comme avant.</p>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>src\smart_imputer\imputer.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 14</span>
-<span class="normal"> 15</span>
-<span class="normal"> 16</span>
-<span class="normal"> 17</span>
-<span class="normal"> 18</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 18</span>
 <span class="normal"> 19</span>
 <span class="normal"> 20</span>
 <span class="normal"> 21</span>
@@ -1047,13 +1043,30 @@ entraîne un modèle à chaque appel, comme avant.</p>
 <span class="normal">103</span>
 <span class="normal">104</span>
 <span class="normal">105</span>
-<span class="normal">106</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">impute_missing_values</span><span class="p">(</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">impute_missing_values</span><span class="p">(</span>
     <span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span>
     <span class="n">deletion_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">40.0</span><span class="p">,</span>
     <span class="n">r2_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span>
     <span class="n">nb_estimators</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
     <span class="n">random_value</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span><span class="p">,</span>
-    <span class="n">models_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>  <span class="c1"># Ajout</span>
+    <span class="n">models_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Impute les valeurs manquantes (médiane puis Random Forest si R2 suffisant).</span>
 
@@ -1105,19 +1118,32 @@ entraîne un modèle à chaque appel, comme avant.</p>
                         <span class="n">c</span><span class="p">,</span>
                         <span class="n">model_path</span><span class="p">,</span>
                     <span class="p">)</span>
+
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span>
-                        <span class="n">n_estimators</span><span class="o">=</span><span class="n">nb_estimators</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_value</span>
-                    <span class="p">)</span>
-                    <span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">feats</span><span class="p">],</span> <span class="n">train_df</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
-                    <span class="k">if</span> <span class="n">model_path</span><span class="p">:</span>
-                        <span class="n">model_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                        <span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">rf</span><span class="p">,</span> <span class="n">model_path</span><span class="p">)</span>
-                        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                            <span class="s2">"</span><span class="si">%s</span><span class="s2"> : modèle entraîné puis sauvegardé dans </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span>
-                            <span class="n">c</span><span class="p">,</span>
-                            <span class="n">model_path</span><span class="p">,</span>
+                    <span class="k">with</span> <span class="n">mlflow</span><span class="o">.</span><span class="n">start_run</span><span class="p">(</span><span class="n">run_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"imputation_rf_</span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">"</span><span class="p">):</span>
+                        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">"n_estimators"</span><span class="p">,</span> <span class="n">nb_estimators</span><span class="p">)</span>
+                        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">"random_state"</span><span class="p">,</span> <span class="n">random_value</span><span class="p">)</span>
+                        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_param</span><span class="p">(</span><span class="s2">"colonne"</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+
+                        <span class="n">rf</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span>
+                            <span class="n">n_estimators</span><span class="o">=</span><span class="n">nb_estimators</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_value</span>
                         <span class="p">)</span>
+                        <span class="n">rf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">feats</span><span class="p">],</span> <span class="n">train_df</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
+
+                        <span class="n">pred_train</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">feats</span><span class="p">])</span>
+                        <span class="n">r2</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">pred_train</span><span class="p">)</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">"</span><span class="si">%s</span><span class="s2"> : R2 = </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">r2</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+                        <span class="n">mlflow</span><span class="o">.</span><span class="n">log_metric</span><span class="p">(</span><span class="s2">"r2_train"</span><span class="p">,</span> <span class="n">r2</span><span class="p">)</span>
+                        <span class="n">mlflow</span><span class="o">.</span><span class="n">sklearn</span><span class="o">.</span><span class="n">log_model</span><span class="p">(</span><span class="n">rf</span><span class="p">,</span> <span class="s2">"model"</span><span class="p">)</span>
+
+                        <span class="k">if</span> <span class="n">model_path</span><span class="p">:</span>
+                            <span class="n">model_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                            <span class="n">joblib</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">rf</span><span class="p">,</span> <span class="n">model_path</span><span class="p">)</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                                <span class="s2">"</span><span class="si">%s</span><span class="s2"> : modèle entraîné puis sauvegardé dans </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span>
+                                <span class="n">c</span><span class="p">,</span>
+                                <span class="n">model_path</span><span class="p">,</span>
+                            <span class="p">)</span>
 
                 <span class="n">pred_train</span> <span class="o">=</span> <span class="n">rf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">feats</span><span class="p">])</span>
                 <span class="n">r2</span> <span class="o">=</span> <span class="n">r2_score</span><span class="p">(</span><span class="n">train_df</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">pred_train</span><span class="p">)</span>
