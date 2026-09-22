@@ -16,7 +16,7 @@ dependencies = [
     "pydantic>=2.13.4",
     "pandera>=0.32.1",
     "joblib>=1.5.3",
-    "mlflow==3.16.0"          # <-- AJOUTÉ
+    "mlflow==3.16.1"          # <-- AJOUTÉ
 ]
 
 [project.optional-dependencies]
